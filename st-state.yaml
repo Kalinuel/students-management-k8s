@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mystatefulset
+  namespace: student-management
+spec:
+  serviceName: mystatefulset
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mystatefulset
+  template:
+    metadata:
+      labels:
+        app: mystatefulset
+    spec:
+      containers:
+      - name: myapp
+        image: nginx:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: www
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: 
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+
+---
+apiVersion: v1 
+kind: Service 
+metadata:
+  name: statefulset-service
+  namespace: student-management
+spec:
+  selector:
+    app: mystatefulset
+  ports:
+  - protocol: TCP
+    port: 80
+

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: bk-deploy
+  namespace: student-management
+spec: 
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bk-deploy 
+  template:
+    metadata:
+      labels:
+        app: bk-deploy
+    spec:
+      containers:
+      - name: bk-deploy
+        image: nginx:latest
+        imagePullPolicy: IfNotPresent
+        resources: 
+          requests:
+             cpu: "100m"
+             memory: "200Mi"
+          limits:
+            cpu: "300m"
+            memory: "500Mi"
+
+---
+apiVersion: v1 
+kind: Service 
+metadata:
+ name: bk-service
+ namespace: student-management
+spec:
+  selector:
+    app: bk-deploy
+  ports:
+  - protocol: TCP
+    port: 80
+    
+      

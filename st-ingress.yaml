@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: 
+  name: my-ingress
+  namespace: student-management
+spec:
+  rules:
+  - host: management.local
+    http:
+      paths: 
+      - path: /
+        pathType: Prefix
+        backend: 
+          service:
+            name: management-service
+            port:
+              number: 80
+      - path: /api
+        pathType: Prefix
+        backend: 
+          service:
+            name: bk-service
+            port:
+              number: 80
+      - path: /db
+        pathType: Prefix
+        backend: 
+          service:
+            name: statefulset-service
+            port:
+              number: 80
+        
